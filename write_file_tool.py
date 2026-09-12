@@ -1,6 +1,6 @@
 def write_file(filename: str, new_content:str) -> str:
-    agent_workspace_path = "workspace"
-    file_path = f"{workspace_path}}/{filename}"
+    agent_workspace_path = "urlshortener"
+    file_path = f"{agent_workspace_path}/{filename}"
     print(f"writing {filename}")
     try:
         with open(file_path, "w", encoding="utf-8") as file:

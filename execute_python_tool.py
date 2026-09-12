@@ -2,7 +2,7 @@ from pathlib import Path
 import subprocess
 import sys
 
-WORKSPACE = Path("workspace").resolve()
+WORKSPACE = Path("urlshortener").resolve()
 def execute_file(filename: str,  arguments: list[str] = []) -> str:
     """ Execute a Python file from the agent workspace. Only pass the python file name with arguments to the file """
     print(f"executing {filename}")

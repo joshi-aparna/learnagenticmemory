@@ -1,7 +1,7 @@
 def read_file(filename: str) -> str:
-    agent_workspace_path = "workspace"
+    agent_workspace_path = "urlshortner"
     print(f"reading file: {filename}")
-    file_path = f"{workspace_path}/{filename}" 
+    file_path = f"{agent_workspace_path}/{filename}" 
 
     try:
         with open(file_path, "r", encoding="utf-8") as file:
