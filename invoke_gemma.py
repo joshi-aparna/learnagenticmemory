@@ -12,7 +12,7 @@ model="gemma4:e4b"
 
 core_memory = load_core_memory()
 prompt = """
-Hi! My name is Aparna. I prefer python for code execution. I prefer using simple code over frameworks.
+Do you know my name? What do you know about me?
 """
 messages=[
     {
