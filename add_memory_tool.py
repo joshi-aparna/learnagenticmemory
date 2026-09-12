@@ -1,13 +1,20 @@
 from pathlib import Path
 import json
 from datetime import datetime
+from ollama import embed
+
 WORKSPACE = Path("urlshortener").resolve()
 MEMORY_FILE = WORKSPACE / "memory.json"
 
+EMBEDDING_MODEL = "embeddinggemma" 
+def get_embedding(text: str) -> list[float]:
+    response = embed( model=EMBEDDING_MODEL, input=text )
+    return response["embeddings"][0]
 
-def add_memory(memory: str) -> str:
+def archival_memory_insert(memory: str) -> str:
     """
-    Save a useful piece of information for future conversations.
+    Store information in archival memory for possible retrieval
+    in future interactions.
     """
 
     if MEMORY_FILE.exists():
@@ -20,6 +27,7 @@ def add_memory(memory: str) -> str:
     new_memory = {
         "id": next_id,
         "memory": memory,
+        "embedding": get_embedding(memory),
         "created": datetime.now().isoformat()
     }
 

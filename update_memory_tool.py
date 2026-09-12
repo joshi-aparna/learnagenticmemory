@@ -1,10 +1,11 @@
 from pathlib import Path
 import json
 from datetime import datetime
+from add_memory_tool import get_embedding
 
-def update_memory(memory_id: int, memory: str) -> str:
+def archival_memory_update(memory_id: int, memory: str) -> str:
     """
-    Update an existing long-term memory by its ID.
+    Update an existing archival memory.
     """
     WORKSPACE = Path("urlshortener").resolve()
     MEMORY_FILE = WORKSPACE / "memory.json"
@@ -17,6 +18,7 @@ def update_memory(memory_id: int, memory: str) -> str:
     for item in memories:
         if item["id"] == memory_id:
             item["memory"] = memory
+            item["embedding"] = get_embedding(memory)
             item["updated"] = datetime.now().isoformat()
 
             MEMORY_FILE.write_text(
