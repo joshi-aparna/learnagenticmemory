@@ -9,16 +9,13 @@ from search_memory_tool import archival_memory_search
 from core_memory_tool import core_memory_append, core_memory_replace, load_core_memory
 
 model="gemma4:e4b"
-
-core_memory = load_core_memory()
 prompt = """
 Do you know my name? What do you know about me?
 """
-messages=[
-    {
 
-            "role": "system",
-            "content": """
+def build_system_prompt():
+    core_memory = load_core_memory()
+    system_prompt = f"""
 You are a stateful agent with access to tools and persistent memory.
 
 CORE MEMORY
@@ -44,9 +41,19 @@ When possible, update an existing memory rather than creating a duplicate.
 
 ENVIRONMENT
 Use read_file, write_file, and execute to inspect, modify, and test files when needed.
+CORE MEMORY
+{chr(10).join(core_memory)}
 
 Complete the user's task using the available tools. Do not claim something was done unless you have actually done it.
 """
+    return system_prompt
+
+
+messages=[
+    {
+
+            "role": "system",
+            "content": build_system_prompt()
         },
         {
             "role": "user",
