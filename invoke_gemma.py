@@ -10,7 +10,7 @@ from core_memory_tool import core_memory_append, core_memory_replace, load_core_
 
 model="gemma4:e4b"
 prompt = """
-I want to build a URL shortening service in Python. Let's start by deciding on a simple architecture and the main components we will need. Don't write code yet. Just save the plan.
+Remember too write unit tests for the project code when you make any change.
 """
 
 def build_system_prompt():
