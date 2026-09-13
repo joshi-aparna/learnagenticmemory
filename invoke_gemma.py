@@ -7,10 +7,11 @@ from update_memory_tool import archival_memory_update
 from delete_memory_tool import delete_memory
 from search_memory_tool import archival_memory_search
 from core_memory_tool import core_memory_append, core_memory_replace, load_core_memory
+from send_message_tool import send_message
 
 model="gemma4:e4b"
 prompt = """
-Remember too write unit tests for the project code when you make any change.
+I want to build a URL shortening service in Python. Let's start by deciding on a simple architecture and the main components we will need. Don't write code yet. Just save the plan with specific stages so that they can be implemented one by one. Each stage should have clear requirements and goals.
 """
 
 def build_system_prompt():
@@ -44,7 +45,7 @@ Use read_file, write_file, and execute to inspect, modify, and test files when n
 CORE MEMORY
 {chr(10).join(core_memory)}
 
-Complete the user's task using the available tools. Do not claim something was done unless you have actually done it.
+Complete the user's task using the available tools. Do not claim something was done unless you have actually done it. Use send_message tool to complete the turn and send a message to the user.
 """
     return system_prompt
 
@@ -60,19 +61,18 @@ messages=[
             "content": prompt
         }
     ]
-while True:
+turn_finished = False
+while not turn_finished:
 
     response = chat(
         model=model,
         messages=messages,
-        tools=[read_file, write_file, execute_file, archival_memory_insert, archival_memory_search, archival_memory_update, delete_memory, core_memory_replace, core_memory_append]
+        tools=[read_file, write_file, execute_file, archival_memory_insert, archival_memory_search, archival_memory_update, delete_memory, core_memory_replace, core_memory_append, send_message]
     )
     print(response.message)
     messages.append(response.message)
-    if not response.message.tool_calls: 
-        write_file("log.txt", "prompt=" + prompt + "\nmessages=" + str(messages) + "\n response =" + response.message.content)
-        print(response.message.content) 
-        break
+    if not response.message.tool_calls:
+        continue
     for tool_call in response.message.tool_calls:
         name = tool_call.function.name 
         arguments = tool_call.function.arguments 
@@ -95,7 +95,10 @@ while True:
             result = core_memory_append(**arguments)
         elif name == "core_memory_replace":
             result = core_memory_replace(**arguments)
+        elif name == "send_message":
+            write_file("log.txt", "prompt=" + prompt + "\nmessages=" + str(messages) + "\n response =" + response.message.content)
+            turn_finished = True
+            print(response.message.content) 
         else: 
             result = f"ERROR: unknown tool: {name}"
         messages.append({ "role": "tool", "content": result })
-    print(response.message)

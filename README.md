@@ -8,3 +8,6 @@ ollama pull embeddinggemma
 
 ### added support for core memory and archival memory
 no support for compressing memory - it only grows
+
+Observation: 
+Thinking response ends turn because of no tool call. Introduced send_message tool for explicit end of turn.

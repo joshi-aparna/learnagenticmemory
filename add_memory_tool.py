@@ -13,8 +13,16 @@ def get_embedding(text: str) -> list[float]:
 
 def archival_memory_insert(memory: str) -> str:
     """
-    Store information in archival memory for possible retrieval
-    in future interactions.
+    Store information that may be useful in future sessions but does not need to be continuously visible in core memory.
+    Use this for durable project knowledge such as:
+    - architectural decisions
+    - implementation decisions
+    - important discoveries
+    - completed milestones
+    - unresolved issues
+    - project progress
+
+    Do not use it for transient conversation details.
     """
 
     if MEMORY_FILE.exists():
